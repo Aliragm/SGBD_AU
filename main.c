@@ -104,7 +104,24 @@ void criar_tabela(){
     }//implementar strings
 }
 
+void apagar_tabela(){
+    char nome_arquivo[21];
+    printf("Digite o nome do arquivo (sem o .txt)\n:");
+    getchar();
+    fgets(nome_arquivo, 20, stdin);
+    nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
+    strcat(nome_arquivo, ".txt");
+    remove(nome_arquivo);
+}
+
 int main(){
-    criar_tabela();
+    char comando;
+    printf("Digite o que deseja fazer:\nCriar tabela = c\nRemover tabela = r\n:");
+    scanf("%c", &comando);
+    switch (comando)
+    {
+    case 'c': criar_tabela(); break;
+    case 'r': apagar_tabela(); break;
+    }
     return 0;
 }
