@@ -3,6 +3,7 @@
 #include <string.h>
 #include <errno.h>
 
+
 void criar_tabela(){
     FILE *arquivo_tabela;
     char tipo_dado, nome_tabela[21];
@@ -35,11 +36,12 @@ void criar_tabela(){
             perror("Erro ao abrir o arquivo");
             return;
         }
+      fprintf(arquivo_tabela, "i\n");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
                 fprintf(arquivo_tabela, "%i ", tabela[i][j]);
             }
-            
+
         }
     }
     else if(tipo_dado == 'c'){
@@ -56,6 +58,7 @@ void criar_tabela(){
             perror("Erro ao abrir o arquivo");
             return;
         }
+      fprintf(arquivo_tabela, "c\n");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
                 fprintf(arquivo_tabela, "%c ", tabela[i][j]);
@@ -76,6 +79,7 @@ void criar_tabela(){
             perror("Erro ao abrir o arquivo");
             return;
         }
+      fprintf(arquivo_tabela, "f\n");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
                 fprintf(arquivo_tabela, "%f ", tabela[i][j]);
@@ -96,6 +100,7 @@ void criar_tabela(){
             perror("Erro ao abrir o arquivo");
             return;
         }
+      fprintf(arquivo_tabela, "d\n");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
                 fprintf(arquivo_tabela, "%lf ", tabela[i][j]);
@@ -112,6 +117,25 @@ void apagar_tabela(){
     nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
     strcat(nome_arquivo, ".txt");
     remove(nome_arquivo);
+}
+
+void listar_dados_tabelas(){
+  FILE *arquivo;
+  char nome_arquivo[21];
+  char tipo_dado;
+  printf("Digite o nome do arquivo (sem o .txt)\n:");
+  getchar();
+  fgets(nome_arquivo, 20, stdin);
+  nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
+  strcat(nome_arquivo, ".txt");
+  arquivo = fopen(nome_arquivo, "r");
+  fscanf(arquivo,"%c", &tipo_dado);
+  switch(tipo_dado){
+    case 'i': break;
+    case 'c': break;
+    case 'f': break;
+    case 'd': break;
+  }
 }
 
 int main(){
