@@ -180,13 +180,16 @@ void pesquisar_valor(){
 
 int main(){
     char comando;
-    printf("Digite o que deseja fazer:\nCriar tabela = c\nRemover tabela = r\nListar Dados de uma tabela = l\n:");
-    scanf("%c", &comando);
-    switch (comando)
+    while (comando != 's')
     {
-    case 'c': criar_tabela(); break;
-    case 'r': apagar_tabela(); break;
-    case 'l': listar_dados_tabelas(); break;
+        printf("\n\nDigite o que deseja fazer:\nCriar tabela = c\nRemover tabela = r\nListar Dados de uma tabela = l\nSair do programa = s\n:");
+        scanf("%c", &comando);
+        switch (comando)
+        {
+        case 'c': criar_tabela(); break;
+        case 'r': apagar_tabela(); break;
+        case 'l': listar_dados_tabelas(); break;
+        }
     }
     return 0;
 }
