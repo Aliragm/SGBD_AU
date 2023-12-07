@@ -52,6 +52,7 @@ void criar_tabela(){
             for (j = 0; j < colunas; j++){
                 printf("Coluna %i: ", j + 1);
                 scanf("%c", &tabela[i][j]);
+                getchar();
             }
         }
         arquivo_tabela = fopen(nome_tabela,"w");
@@ -62,8 +63,9 @@ void criar_tabela(){
       fprintf(arquivo_tabela, "c ");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
-                fprintf(arquivo_tabela, "%c", tabela[i][j]);
+                fprintf(arquivo_tabela, "%c ", tabela[i][j]);
             }
+            fprintf(arquivo_tabela, "\n");
         }
         fclose(arquivo_tabela);
     }
@@ -84,8 +86,9 @@ void criar_tabela(){
       fprintf(arquivo_tabela, "f ");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
-                fprintf(arquivo_tabela, "%f", tabela[i][j]);
+                fprintf(arquivo_tabela, "%f ", tabela[i][j]);
             }
+            fprintf(arquivo_tabela, "\n");
         }
         fclose(arquivo_tabela);
     }
@@ -106,8 +109,9 @@ void criar_tabela(){
         fprintf(arquivo_tabela, "d ");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
-                fprintf(arquivo_tabela, "%lf", tabela[i][j]);
+                fprintf(arquivo_tabela, "%lf ", tabela[i][j]);
             }
+            fprintf(arquivo_tabela, "\n");
         }
         fclose(arquivo_tabela);
     }//implementar strings
