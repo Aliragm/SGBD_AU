@@ -143,6 +143,41 @@ void listar_dados_tabelas(){
     fclose(arquivo);
 }
 
+void pesquisar_valor(){
+    FILE *arquivo;
+    char nome_arquivo[21];
+    char linha[256];
+    int colunas = 0;
+    int opcao = 0;
+
+    printf("Digite o nome do arquivo (sem o .txt)\n:");
+    getchar();
+    fgets(nome_arquivo, 20, stdin);
+    nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
+    strcat(nome_arquivo, ".txt");
+    arquivo = fopen(nome_arquivo, "r");
+    fseek(arquivo, 2, SEEK_SET);
+    fgets(linha, sizeof(linha), arquivo);
+    for(int i = 0; i < sizeof(linha); i++){
+        if(linha[i] == ' '){
+            colunas += 1;
+        }
+    }
+    printf("Selecione uma coluna das %i disponiveis: ", colunas);
+    scanf("%i", &colunas);
+    printf("Selecione uma opcao desejada:\n1 - valores maior que o valor informado\n2 - valores maior que o valor informado\n3 - valores iguais ao valor informado\n4 - valores menores que o valor informado\n5 - valores menor ou igual que o valor informado\n:");
+    scanf("%i", &opcao);
+    //lembrar-se de adicionar o ngc de strings quando strings for implementado
+    switch(opcao){
+        case 1: break;
+        case 2: break;
+        case 3: break;
+        case 4: break;
+        case 5: break;
+        //lembrar de add o caso 6 das strings
+    }
+}
+
 int main(){
     char comando;
     printf("Digite o que deseja fazer:\nCriar tabela = c\nRemover tabela = r\nListar Dados de uma tabela = l\n:");
