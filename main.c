@@ -139,7 +139,7 @@ void listar_dados_tabelas(){
     nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
     strcat(nome_arquivo, ".txt");
     arquivo = fopen(nome_arquivo, "r");
-    fseek( arquivo, 2, SEEK_SET );
+    fseek(arquivo, 2, SEEK_SET);
     printf("Os dados sao:\n");
     while(fgets(linha, sizeof(linha), arquivo)){
     printf("%s", linha);
@@ -153,6 +153,9 @@ void pesquisar_valor(){
     char linha[256];
     int colunas = 0;
     int opcao = 0;
+    char tipo_arquivo;
+    char valor_da_vez[3];
+    char valor_pesquisa;
 
     printf("Digite o nome do arquivo (sem o .txt)\n:");
     getchar();
@@ -160,6 +163,7 @@ void pesquisar_valor(){
     nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
     strcat(nome_arquivo, ".txt");
     arquivo = fopen(nome_arquivo, "r");
+    fscanf(arquivo, "%c", tipo_arquivo);
     fseek(arquivo, 2, SEEK_SET);
     fgets(linha, sizeof(linha), arquivo);
     for(int i = 0; i < sizeof(linha); i++){
@@ -169,15 +173,273 @@ void pesquisar_valor(){
     }
     printf("Selecione uma coluna das %i disponiveis: ", colunas);
     scanf("%i", &colunas);
-    printf("Selecione uma opcao desejada:\n1 - valores maior que o valor informado\n2 - valores maior que o valor informado\n3 - valores iguais ao valor informado\n4 - valores menores que o valor informado\n5 - valores menor ou igual que o valor informado\n:");
+    printf("Digite qual o valor você deseja procurar\n:");
+    getchar();
+    scanf("%c", &valor_pesquisa);
+    printf("Selecione uma opcao desejada:\n1 - valores maior que o valor informado\n2 - valores maiores ou iguais o valor informado\n3 - valores iguais ao valor informado\n4 - valores menores que o valor informado\n5 - valores menor ou igual que o valor informado\n:");
     scanf("%i", &opcao);
     //lembrar-se de adicionar o ngc de strings quando strings for implementado
     switch(opcao){
-        case 1: break;
-        case 2: break;
-        case 3: break;
-        case 4: break;
-        case 5: break;
+        case 1:
+        if(tipo_arquivo == 'i' | tipo_arquivo == 'f' | tipo_arquivo == 'd'){
+            double *resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(double));
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) > strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) > strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);
+        }
+        else{//char
+
+        }
+        break;
+        case 2: 
+        if(tipo_arquivo == 'i' | tipo_arquivo == 'f' | tipo_arquivo == 'd'){
+            double *resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(double));
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) >= strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) >= strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);
+        }
+        else{//char
+              
+        }
+        break;
+        case 3:
+        if(tipo_arquivo == 'i' | tipo_arquivo == 'f' | tipo_arquivo == 'd'){
+            double *resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(double));
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) == strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) == strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);
+        }
+        else{//char
+
+        }
+        break;
+        case 4:
+        if(tipo_arquivo == 'i' | tipo_arquivo == 'f' | tipo_arquivo == 'd'){
+            double *resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(double));
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) < strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) < strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);
+        }
+        else{//char
+
+        } 
+        break;
+        case 5: 
+        if(tipo_arquivo == 'i' | tipo_arquivo == 'f' | tipo_arquivo == 'd'){
+            double *resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(double));
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) <= strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strtod(valor_da_vez, NULL) <= strtod(valor_pesquisa, NULL)){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(double) * contador_alocacao);
+                        resultados[contador_indice] = strtod(valor_da_vez, NULL);
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(double)){
+                    printf("Não há valores elegíveis");
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%i\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);
+        }
+        else{//char
+
+        }
+        break;
         //lembrar de add o caso 6 das strings
     }
 }
