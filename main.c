@@ -229,7 +229,52 @@ void pesquisar_valor(){
             free(resultados);
         }
         else{//char
-
+            char **resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(char) * 3);
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) > 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) > 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);
         }
         break;
         case 2: 
@@ -281,7 +326,52 @@ void pesquisar_valor(){
             free(resultados);
         }
         else{//char
-              
+            char **resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(char) * 3);
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) >= 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) >= 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);      
         }
         break;
         case 3:
@@ -333,7 +423,52 @@ void pesquisar_valor(){
             free(resultados);
         }
         else{//char
-
+            char **resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(char) * 3);
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) == 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) == 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);
         }
         break;
         case 4:
@@ -385,7 +520,52 @@ void pesquisar_valor(){
             free(resultados);
         }
         else{//char
-
+            char **resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(char) * 3);
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) < 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) < 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);
         } 
         break;
         case 5: 
@@ -437,7 +617,52 @@ void pesquisar_valor(){
             free(resultados);
         }
         else{//char
-
+            char **resultados;
+            int contador_alocacao = 0;
+            int contador_indice = 0;
+            resultados = malloc(sizeof(char) * 3);
+            if(colunas == 1){
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) <= 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            else{
+                fseek(arquivo, 2 * colunas, SEEK_SET);
+                while(fgets(valor_da_vez, 1, arquivo)){
+                    if(strcmp(valor_pesquisa, valor_da_vez) <= 0){
+                        contador_alocacao += 1;
+                        resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
+                        resultados[contador_indice] = valor_da_vez;
+                        contador_indice += 1;
+                    }
+                }
+                if(sizeof(resultados) == sizeof(char) * 3){
+                    printf("Não há valores elegíveis");
+                    break;
+                }
+                else{
+                    printf("Os valores que se encaixam são:\n");
+                    for(int i = 0; i < contador_indice; i++){
+                        printf("%s\n", resultados[i]);
+                    }
+                }
+            }
+            free(resultados);
         }
         break;
         //lembrar de add o caso 6 das strings
@@ -455,6 +680,7 @@ int main(){
         case 'c': criar_tabela(); break;
         case 'r': apagar_tabela(); break;
         case 'l': listar_dados_tabelas(); break;
+        case 'p': pesquisar_valor(); break;
         }
     }
     return 0;
