@@ -60,7 +60,7 @@ void criar_tabela(){
             perror("Erro ao abrir o arquivo");
             return;
         }
-      fprintf(arquivo_tabela, "c ");
+      fprintf(arquivo_tabela, "c\n");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
                 fprintf(arquivo_tabela, "%c ", tabela[i][j]);
@@ -72,7 +72,7 @@ void criar_tabela(){
     else if(tipo_dado == 'f'){
         float tabela[linhas][colunas];
         for (i = 0; i < linhas; i++){
-            printf("Digite a linha %i\n", i + 1);
+            printf("Digite a linha (Até 4 digitos depois da virgula.) %i\n", i + 1);
             for (j = 0; j < colunas; j++){
                 printf("Coluna %i: ", j + 1);
                 scanf("%f", &tabela[i][j]);
@@ -83,10 +83,10 @@ void criar_tabela(){
             perror("Erro ao abrir o arquivo");
             return;
         }
-      fprintf(arquivo_tabela, "f ");
+      fprintf(arquivo_tabela, "f\n");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
-                fprintf(arquivo_tabela, "%f ", tabela[i][j]);
+                fprintf(arquivo_tabela, "%.4f ", tabela[i][j]);
             }
             fprintf(arquivo_tabela, "\n");
         }
@@ -95,7 +95,7 @@ void criar_tabela(){
     else if(tipo_dado == 'd'){
         double tabela[linhas][colunas];
         for (i = 0; i < linhas; i++){
-            printf("Digite a linha %i\n", i + 1);
+            printf("Digite a linha (Até 4 digitos depois da virgula.) %i\n", i + 1);
             for (j = 0; j < colunas; j++){
                 printf("Coluna %i: ", j + 1);
                 scanf("%lf", &tabela[i][j]);
@@ -106,10 +106,10 @@ void criar_tabela(){
             perror("Erro ao abrir o arquivo");
             return;
         }
-        fprintf(arquivo_tabela, "d ");
+        fprintf(arquivo_tabela, "d\n");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
-                fprintf(arquivo_tabela, "%lf ", tabela[i][j]);
+                fprintf(arquivo_tabela, "%.4lf ", tabela[i][j]);
             }
             fprintf(arquivo_tabela, "\n");
         }
@@ -152,10 +152,11 @@ void pesquisar_valor(){
     char nome_arquivo[21];
     char linha[256];
     int colunas = 0;
+    char *token;
     int opcao = 0;
     char tipo_arquivo;
     char valor_da_vez[3];
-    char valor_pesquisa;
+    char valor_pesquisa[256];
 
     printf("Digite o nome do arquivo (sem o .txt)\n:");
     getchar();
@@ -163,31 +164,34 @@ void pesquisar_valor(){
     nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
     strcat(nome_arquivo, ".txt");
     arquivo = fopen(nome_arquivo, "r");
-    fscanf(arquivo, "%c", tipo_arquivo);
-    fseek(arquivo, 2, SEEK_SET);
+    fscanf(arquivo, "%c", &tipo_arquivo);
     fgets(linha, sizeof(linha), arquivo);
-    for(int i = 0; i < sizeof(linha); i++){
-        if(linha[i] == ' '){
-            colunas += 1;
-        }
+    fgets(linha, sizeof(linha), arquivo);
+    linha[strcspn(linha, "\n")] = 0;
+    token = strtok(linha, " ");
+    while (token != NULL) {
+        colunas += 1;
+        token = strtok(NULL, " ");
     }
     printf("Selecione uma coluna das %i disponiveis: ", colunas);
     scanf("%i", &colunas);
     printf("Digite qual o valor você deseja procurar\n:");
     getchar();
-    scanf("%c", &valor_pesquisa);
+    fgets(valor_pesquisa, sizeof(valor_pesquisa), stdin);
+    valor_pesquisa[strcspn(valor_pesquisa, "\n")] = 0;
     printf("Selecione uma opcao desejada:\n1 - valores maior que o valor informado\n2 - valores maiores ou iguais o valor informado\n3 - valores iguais ao valor informado\n4 - valores menores que o valor informado\n5 - valores menor ou igual que o valor informado\n:");
     scanf("%i", &opcao);
+    getchar();
     //lembrar-se de adicionar o ngc de strings quando strings for implementado
     switch(opcao){
         case 1:
-        if(tipo_arquivo == 'i' | tipo_arquivo == 'f' | tipo_arquivo == 'd'){
+        if(tipo_arquivo == 'i' || tipo_arquivo == 'f' || tipo_arquivo == 'd'){
             double *resultados;
             int contador_alocacao = 0;
             int contador_indice = 0;
             resultados = malloc(sizeof(double));
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strtod(valor_da_vez, NULL) > strtod(valor_pesquisa, NULL)){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
@@ -202,13 +206,13 @@ void pesquisar_valor(){
                 else{
                     printf("Os valores que se encaixam são:\n");
                     for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strtod(valor_da_vez, NULL) > strtod(valor_pesquisa, NULL)){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
@@ -222,7 +226,7 @@ void pesquisar_valor(){
                 else{
                     printf("Os valores que se encaixam são:\n");
                     for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
@@ -234,11 +238,11 @@ void pesquisar_valor(){
             int contador_indice = 0;
             resultados = malloc(sizeof(char) * 3);
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) > 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -255,11 +259,11 @@ void pesquisar_valor(){
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) > 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -284,7 +288,7 @@ void pesquisar_valor(){
             int contador_indice = 0;
             resultados = malloc(sizeof(double));
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strtod(valor_da_vez, NULL) >= strtod(valor_pesquisa, NULL)){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
@@ -299,13 +303,13 @@ void pesquisar_valor(){
                 else{
                     printf("Os valores que se encaixam são:\n");
                     for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strtod(valor_da_vez, NULL) >= strtod(valor_pesquisa, NULL)){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
@@ -319,7 +323,7 @@ void pesquisar_valor(){
                 else{
                     printf("Os valores que se encaixam são:\n");
                     for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
@@ -331,11 +335,11 @@ void pesquisar_valor(){
             int contador_indice = 0;
             resultados = malloc(sizeof(char) * 3);
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) >= 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -352,11 +356,11 @@ void pesquisar_valor(){
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) >= 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -375,14 +379,14 @@ void pesquisar_valor(){
         }
         break;
         case 3:
-        if(tipo_arquivo == 'i' | tipo_arquivo == 'f' | tipo_arquivo == 'd'){
+        if(tipo_arquivo == 'i' || tipo_arquivo == 'f' || tipo_arquivo == 'd'){
             double *resultados;
             int contador_alocacao = 0;
             int contador_indice = 0;
             resultados = malloc(sizeof(double));
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
-                    if(strtod(valor_da_vez, NULL) == strtod(valor_pesquisa, NULL)){
+                while(fgets(valor_da_vez, sizeof(valor_da_vez), arquivo)){
+                    if(strtod(valor_da_vez, NULL) - strtod(valor_pesquisa, NULL) < 0.001 ){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
                         resultados[contador_indice] = strtod(valor_da_vez, NULL);
@@ -396,14 +400,14 @@ void pesquisar_valor(){
                 else{
                     printf("Os valores que se encaixam são:\n");
                     for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
-                    if(strtod(valor_da_vez, NULL) == strtod(valor_pesquisa, NULL)){
+                while(fgets(valor_da_vez, sizeof(valor_da_vez), arquivo)){
+                    if(strtod(valor_da_vez, NULL) - strtod(valor_pesquisa, NULL) < 0.001){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
                         resultados[contador_indice] = strtod(valor_da_vez, NULL);
@@ -415,8 +419,8 @@ void pesquisar_valor(){
                 }
                 else{
                     printf("Os valores que se encaixam são:\n");
-                    for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                    for(int i = 0; i < contador_indice/2; i++){
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
@@ -428,11 +432,11 @@ void pesquisar_valor(){
             int contador_indice = 0;
             resultados = malloc(sizeof(char) * 3);
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) == 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -449,11 +453,11 @@ void pesquisar_valor(){
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) == 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -478,7 +482,7 @@ void pesquisar_valor(){
             int contador_indice = 0;
             resultados = malloc(sizeof(double));
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strtod(valor_da_vez, NULL) < strtod(valor_pesquisa, NULL)){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
@@ -493,13 +497,13 @@ void pesquisar_valor(){
                 else{
                     printf("Os valores que se encaixam são:\n");
                     for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strtod(valor_da_vez, NULL) < strtod(valor_pesquisa, NULL)){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
@@ -513,7 +517,7 @@ void pesquisar_valor(){
                 else{
                     printf("Os valores que se encaixam são:\n");
                     for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
@@ -525,11 +529,11 @@ void pesquisar_valor(){
             int contador_indice = 0;
             resultados = malloc(sizeof(char) * 3);
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) < 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -546,11 +550,11 @@ void pesquisar_valor(){
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) < 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -575,7 +579,7 @@ void pesquisar_valor(){
             int contador_indice = 0;
             resultados = malloc(sizeof(double));
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strtod(valor_da_vez, NULL) <= strtod(valor_pesquisa, NULL)){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
@@ -590,13 +594,13 @@ void pesquisar_valor(){
                 else{
                     printf("Os valores que se encaixam são:\n");
                     for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strtod(valor_da_vez, NULL) <= strtod(valor_pesquisa, NULL)){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(double) * contador_alocacao);
@@ -610,7 +614,7 @@ void pesquisar_valor(){
                 else{
                     printf("Os valores que se encaixam são:\n");
                     for(int i = 0; i < contador_indice; i++){
-                        printf("%i\n", resultados[i]);
+                        printf("%.2lf\n", resultados[i]);
                     }
                 }
             }
@@ -622,11 +626,11 @@ void pesquisar_valor(){
             int contador_indice = 0;
             resultados = malloc(sizeof(char) * 3);
             if(colunas == 1){
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) <= 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -643,11 +647,11 @@ void pesquisar_valor(){
             }
             else{
                 fseek(arquivo, 2 * colunas, SEEK_SET);
-                while(fgets(valor_da_vez, 1, arquivo)){
+                while(fgets(valor_da_vez, 2, arquivo)){
                     if(strcmp(valor_pesquisa, valor_da_vez) <= 0){
                         contador_alocacao += 1;
                         resultados = realloc(resultados, sizeof(char) * 3 * contador_alocacao);
-                        resultados[contador_indice] = valor_da_vez;
+                        strcpy(resultados[contador_indice], valor_da_vez);
                         contador_indice += 1;
                     }
                 }
@@ -673,7 +677,7 @@ int main(){
     char comando;
     while (comando != 's')
     {
-        printf("\n\nDigite o que deseja fazer:\nCriar tabela = c\nRemover tabela = r\nListar Dados de uma tabela = l\nSair do programa = s\n:");
+        printf("\n\nDigite o que deseja fazer:\nCriar tabela = c\nRemover tabela = r\nListar Dados de uma tabela = l\nPesquisar valor em uma tabela = p\nSair do programa = s\n:");
         scanf("%c", &comando);
         switch (comando)
         {
