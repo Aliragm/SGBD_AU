@@ -77,7 +77,7 @@ void criar_tabela(){
     else if(tipo_dado == 'f'){
         float tabela[linhas][colunas];
         for (i = 0; i < linhas; i++){
-            printf("Digite a linha (Até 4 digitos depois da virgula.) %i\n", i + 1);
+            printf("Digite a linha %i\n", i + 1);
             for (j = 0; j < colunas; j++){
                 printf("Coluna %i: ", j + 1);
                 scanf("%f", &tabela[i][j]);
@@ -91,7 +91,7 @@ void criar_tabela(){
       fprintf(arquivo_tabela, "f\n");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
-                fprintf(arquivo_tabela, "%.4f ", tabela[i][j]);
+                fprintf(arquivo_tabela, "%f ", tabela[i][j]);
             }
             fprintf(arquivo_tabela, "\n");
         }
@@ -100,7 +100,7 @@ void criar_tabela(){
     else if(tipo_dado == 'd'){
         double tabela[linhas][colunas];
         for (i = 0; i < linhas; i++){
-            printf("Digite a linha (Até 4 digitos depois da virgula.) %i\n", i + 1);
+            printf("Digite a linha  %i\n", i + 1);
             for (j = 0; j < colunas; j++){
                 printf("Coluna %i: ", j + 1);
                 scanf("%lf", &tabela[i][j]);
@@ -114,12 +114,12 @@ void criar_tabela(){
         fprintf(arquivo_tabela, "d\n");
         for (i = 0; i < linhas; i++){
             for (j = 0; j < colunas; j++){
-                fprintf(arquivo_tabela, "%.4lf ", tabela[i][j]);
+                fprintf(arquivo_tabela, "%lf ", tabela[i][j]);
             }
             fprintf(arquivo_tabela, "\n");
         }
         fclose(arquivo_tabela);
-    }//implementar strings
+    }
 }
 
 void apagar_tabela(){
@@ -133,6 +133,10 @@ void apagar_tabela(){
     fgets(nome_arquivo, 20, stdin);
     nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
     strcat(nome_arquivo, ".txt");
+    if(strcmp(nome_arquivo, "NOMES.txt") == 0 || strcmp(nome_arquivo, "TEMP.txt") == 0 || strcmp(nome_arquivo, "TEMPNOMES.txt") == 0){
+        printf("Nao e possivel apagar esse arquivo.");
+        return;
+    }
     arquivo = fopen("NOMES.txt", "r");
     if (arquivo == NULL) {
         printf("Não foi possível abrir o arquivo NOMES.txt\n");
@@ -147,6 +151,7 @@ void apagar_tabela(){
         linha[strcspn(linha, "\n")] = 0;
         strcat(linha, ".txt");
         if(strcmp(linha, nome_arquivo) != 0){
+            linha[strcspn(linha, ".txt")] = 0;
             fputs(linha, temp_nomes);
             fputc('\n', temp_nomes);
         }
@@ -168,6 +173,10 @@ void listar_dados_tabelas(){
     fgets(nome_arquivo, 20, stdin);
     nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
     strcat(nome_arquivo, ".txt");
+    if(strcmp(nome_arquivo, "NOMES.txt") == 0 || strcmp(nome_arquivo, "TEMP.txt") == 0 || strcmp(nome_arquivo, "TEMPNOMES.txt") == 0){
+        printf("Nao e possivel acessar esse arquivo.");
+        return;
+    }
     arquivo = fopen(nome_arquivo, "r");
     fseek(arquivo, 2, SEEK_SET);
     printf("Os dados sao:\n");
@@ -175,6 +184,7 @@ void listar_dados_tabelas(){
     printf("%s", linha);
     }
     fclose(arquivo);
+    
 }
 
 void pesquisar_valor(){
@@ -195,6 +205,10 @@ void pesquisar_valor(){
     fgets(nome_arquivo, 20, stdin);
     nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
     strcat(nome_arquivo, ".txt");
+    if(strcmp(nome_arquivo, "NOMES.txt") == 0 || strcmp(nome_arquivo, "TEMP.txt") == 0 || strcmp(nome_arquivo, "TEMPNOMES.txt") == 0){
+        printf("Nao e possivel acessar esse arquivo.");
+        return;
+    }
     arquivo = fopen(nome_arquivo, "r");
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo.\n");
@@ -768,7 +782,7 @@ void lista_tabelas(){
     char linha[256];
 
     arquivo = fopen("NOMES.txt", "r");
-    printf("As tabelas são:\n");
+    printf("As tabelas sao:\n");
     while(fgets(linha, sizeof(linha), arquivo)){
     printf("%s", linha);
     }
@@ -781,7 +795,7 @@ void apagar_linha(){
     FILE *arquivo_temp;
     char linha[256];
     char nome_arquivo[21];
-    int contador_linhas = 1;
+    int contador_linhas = 0;
     int linha_para_apagar = 0;
 
     printf("Escolha o nome da tabela que deseja apagar o registro\n:");
@@ -789,6 +803,10 @@ void apagar_linha(){
     fgets(nome_arquivo, 20, stdin);
     nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
     strcat(nome_arquivo, ".txt");
+    if(strcmp(nome_arquivo, "NOMES.txt") == 0 || strcmp(nome_arquivo, "TEMP.txt") == 0 || strcmp(nome_arquivo, "TEMPNOMES.txt") == 0){
+        printf("Nao e possivel acessar esse arquivo.");
+        return;
+    }
     arquivo = fopen(nome_arquivo, "r");
     if (arquivo == NULL) {
         printf("Não foi possível abrir o arquivo %s\n", nome_arquivo);
@@ -838,6 +856,10 @@ void add_registro(){
     fgets(nome_arquivo, 20, stdin);
     nome_arquivo[strcspn(nome_arquivo, "\n")] = 0;
     strcat(nome_arquivo, ".txt");
+    if(strcmp(nome_arquivo, "NOMES.txt") == 0 || strcmp(nome_arquivo, "TEMP.txt") == 0 || strcmp(nome_arquivo, "TEMPNOMES.txt") == 0){
+        printf("Nao e possivel acessar esse arquivo.");
+        return;
+    }
     arquivo = fopen(nome_arquivo, "r+");
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo.\n");
@@ -866,7 +888,7 @@ void add_registro(){
             fprintf(arquivo, "%i ", coisas_addI);
         }
         fprintf(arquivo, "\n");
-        printf("Linha adicionada com sucesso, agora há %i linhas", linhas + 1);
+        printf("Linha adicionada com sucesso, agora ha %i linhas", linhas + 1);
         break;
         case 'f':
         for(int i = 0; i < colunas; i++){
@@ -875,7 +897,7 @@ void add_registro(){
             fprintf(arquivo, "%f ", coisas_addF);
         }
         fprintf(arquivo, "\n");
-        printf("Linha adicionada com sucesso, agora há %i linhas", linhas + 1);
+        printf("Linha adicionada com sucesso, agora ha %i linhas", linhas + 1);
         break;
         case 'd':
         for(int i = 0; i < colunas; i++){
@@ -884,7 +906,7 @@ void add_registro(){
             fprintf(arquivo, "%lf ", coisas_addD);
         }
         fprintf(arquivo, "\n");
-        printf("Linha adicionada com sucesso, agora há %i linhas", linhas + 1);
+        printf("Linha adicionada com sucesso, agora ha %i linhas", linhas + 1);
         break;
         case 'c':
         for(int i = 0; i < colunas; i++){
@@ -893,7 +915,7 @@ void add_registro(){
             fprintf(arquivo, "%c ", coisas_addC);
         }
         fprintf(arquivo, "\n");
-        printf("Linha adicionada com sucesso, agora há %i linhas", linhas + 1);
+        printf("Linha adicionada com sucesso, agora ha %i linhas", linhas + 1);
         break;
     }
     fclose(arquivo);
@@ -901,19 +923,22 @@ void add_registro(){
 
 int main(){
     char comando;
-    while (comando != 's')
+    printf("Bem vindo, para utilizar o SGBD primeiro crie uma tabela.");
+    while (1)
     {
         printf("\n\nDigite o que deseja fazer:\nCriar tabela = c\nRemover tabela = r\nListar Dados de uma tabela = l\nPesquisar valor em uma tabela = p\nListar tabelas = n\nApagar registro = a\nAdicionar registro = i\nSair do programa = s\n:");
         scanf("%c", &comando);
         switch (comando)
         {
-        case 'c': criar_tabela(); break;
+        case 'c': criar_tabela(); getchar(); break;
         case 'r': apagar_tabela(); break;
         case 'l': listar_dados_tabelas(); break;
         case 'p': pesquisar_valor(); break;
-        case 'n': lista_tabelas(); break;
-        case 'a': apagar_linha(); break;
-        case 'i': add_registro(); break;
+        case 'n': lista_tabelas(); getchar(); break;
+        case 'a': apagar_linha(); getchar(); break;
+        case 'i': add_registro(); getchar(); break;
+        case 's': return 0; break;
+        default: printf("Comando %c nao e reconhecido...tente novamente.", comando); break;
         }
     }
     return 0;
